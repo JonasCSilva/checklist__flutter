@@ -35,6 +35,24 @@
   <body>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+      var firebaseConfig = {
+        apiKey: 'AIzaSyCxQ_2OBdI0tKd7tU6U5xcyUMunaycuius',
+        authDomain: 'fluttertests-bb0cd.firebaseapp.com',
+        databaseURL: 'https://fluttertests-bb0cd.firebaseio.com',
+        projectId: 'fluttertests-bb0cd',
+        storageBucket: 'fluttertests-bb0cd.appspot.com',
+        messagingSenderId: '610636729882',
+        appId: '1:610636729882:web:f44513667f3b67a4e2cba3',
+        measurementId: 'G-6E82MEG3ZF'
+      }
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig)
+    </script>
     <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
