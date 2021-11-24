@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'page2.dart';
-import 'page1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'theme_model.dart';
+import 'page1.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -14,21 +14,14 @@ class App extends StatelessWidget {
         create: (_) => ThemeModel(),
         child: Consumer(builder: (context, ThemeModel themeNotifier, child) {
           return MaterialApp(
-            title: 'Startup Name Generator',
-            theme: themeNotifier.isDark
-                ? ThemeData(brightness: Brightness.dark, tabBarTheme: const TabBarTheme(labelColor: Colors.white))
-                : ThemeData(brightness: Brightness.light, tabBarTheme: const TabBarTheme(labelColor: Colors.black)),
+            title: 'Checklist',
+            theme: themeNotifier.isDark ? ThemeData(brightness: Brightness.dark) : ThemeData(brightness: Brightness.light),
             debugShowCheckedModeBanner: false,
             home: const NavigationPages(),
           );
         }));
   }
 }
-
-const List<Tab> tabs = <Tab>[
-  Tab(icon: Icon(Icons.person)),
-  Tab(icon: Icon(Icons.email)),
-];
 
 class NavigationPages extends StatefulWidget {
   const NavigationPages({Key? key}) : super(key: key);
@@ -37,60 +30,38 @@ class NavigationPages extends StatefulWidget {
   _NavigationPages createState() => _NavigationPages();
 }
 
-class _NavigationPages extends State<NavigationPages> with /* Single */ TickerProviderStateMixin {
-  late Future<QuerySnapshot> myFuture;
+class _NavigationPages extends State<NavigationPages> {
+  late Future<DocumentSnapshot<Map<String, dynamic>>> myFuture;
 
-  late TabController _tabController;
-  int _selectedIndex = 0;
-  late List<Widget> tabWidgets;
+  Offset position = const Offset(20.0, 20.0);
 
   @override
   void initState() {
     super.initState();
-    CollectionReference dishes = FirebaseFirestore.instance.collection('dishes');
-    myFuture = dishes.get();
-    tabWidgets = <Widget>[
-      Page1(myFuture: myFuture),
-      const Page2(),
-    ];
-    _tabController = TabController(initialIndex: 0, vsync: this, length: tabWidgets.length);
-    _tabController.addListener(() {
-      setState(() {
-        _selectedIndex = _tabController.index;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    DocumentReference checklist = FirebaseFirestore.instance.collection('Checklist').doc('r78yPLE8Z0GjOSsqjIt6');
+    myFuture = checklist.get() as Future<DocumentSnapshot<Map<String, dynamic>>>;
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ThemeModel themeNotifier, child) {
-      return Scaffold(
-          appBar: AppBar(
-            title: Text(_selectedIndex.toString()),
-            actions: [
-              IconButton(
-                  icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny),
-                  onPressed: () {
-                    themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
-                  })
-            ],
-          ),
-          bottomNavigationBar: Material(
-              child: TabBar(
-                controller: _tabController,
-                tabs: tabs,
-              ),
-              color: themeNotifier.isDark ? Theme.of(context).bottomAppBarColor : Colors.blue),
-          body: TabBarView(
-            controller: _tabController,
-            children: tabWidgets,
-          ));
+      return ChangeNotifierProvider(
+          create: (_) => ThemeModel(),
+          child: Consumer(builder: (context, ThemeModel themeNotifier, child) {
+            return Scaffold(
+              appBar: AppBar(centerTitle: true, title: Text('0'), actions: [
+                SizedBox(
+                    height: 75.0,
+                    width: 75.0,
+                    child: IconButton(
+                        icon: Icon(themeNotifier.isDark ? Icons.nightlight_round : Icons.wb_sunny, size: 36),
+                        onPressed: () {
+                          themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
+                        }))
+              ]),
+              body: Stack(children: <Widget>[Page1(myFuture: myFuture)]),
+            );
+          }));
     });
   }
 }

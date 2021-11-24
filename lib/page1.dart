@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'list.dart';
 
 class Page1 extends StatefulWidget {
-  final Future<QuerySnapshot> myFuture;
+  final Future<DocumentSnapshot<Map<String, dynamic>>> myFuture;
 
   const Page1({Key? key, required this.myFuture}) : super(key: key);
 
@@ -11,32 +12,32 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1 extends State<Page1> {
+  late List<Map<String, dynamic>>? docs;
+  late Future<DocumentSnapshot<Map<String, dynamic>>> myFuture2;
+
+  /* @override
+  void initState() {
+    super.initState();
+    myFuture2 = Future.value(widget.myFuture);
+  } */
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
+    return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       future: widget.myFuture,
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
-          return const Text("Something went wrong");
+          return Text(snapshot.error.toString());
         }
 
-        if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
+        /* if (snapshot.hasData && snapshot.data!.isEmpty) {
           return const Text("Document does not exist");
-        }
+        } */
 
         if (snapshot.connectionState == ConnectionState.done) {
-          List<DocumentSnapshot<Map<String, dynamic>>> docs = snapshot.data!.docs.toList() as List<DocumentSnapshot<Map<String, dynamic>>>;
-          return ListView.builder(
-              /* padding: const EdgeInsets.all(8), */
-              itemCount: docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: const EdgeInsets.all(10),
-                  child: Center(child: Text(docs[index].data()!['index'].toString())),
-                );
-              });
+          return MyStatefulWidget(items: snapshot.data!['checklist']);
         }
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

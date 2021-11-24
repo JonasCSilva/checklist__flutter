@@ -31,7 +31,7 @@ class _Initialization extends State<Initialization> {
           return const App();
         }
 
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
