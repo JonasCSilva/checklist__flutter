@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
-import 'theme_preference.dart';
+import 'checklist_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ThemeModel extends ChangeNotifier {
-  late bool _isDark;
-  late ThemePreferences _preferences;
+class ChecklistModel extends ChangeNotifier {
+  late ChecklistData _checklistData;
+  late Future<DocumentSnapshot<Map<String, dynamic>>>? items;
+  int _unckedCount = 0;
 
-  bool get isDark => _isDark;
+  int get unckedCount => _unckedCount;
 
-  ThemeModel() {
-    _isDark = false;
-    _preferences = ThemePreferences();
-    getPreferences();
+  set unckedCount(int newValue) {
+    _unckedCount = newValue;
+    /* notifyListeners(); */
   }
 
-  set isDark(bool value) {
-    _isDark = value;
-    _preferences.setTheme(value);
-    notifyListeners();
+  ChecklistModel() {
+    _checklistData = ChecklistData();
+    getData();
   }
 
-  getPreferences() async {
-    _isDark = await _preferences.getTheme();
+  set checklistData(List items) {
+    _checklistData.setChecklist(items);
+  }
+
+  getData() async {
+    items = _checklistData.getChecklist();
     notifyListeners();
   }
 }

@@ -1,15 +1,20 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ThemePreferences {
-  static const prefKey = "pref_key";
+class ChecklistData {
+  CollectionReference checklist = FirebaseFirestore.instance.collection('Checklist');
+  late Future<DocumentSnapshot<Map<String, dynamic>>>? items;
 
-  setTheme(bool value) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(prefKey, value);
+  setChecklist(List items) async {
+    try {
+      await checklist.doc('r78yPLE8Z0GjOSsqjIt6').update({'checklist': items});
+      print("Item updated");
+    } catch (error) {
+      print("Failed to update user: $error");
+    }
   }
 
-  getTheme() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(prefKey) ?? false;
+  getChecklist() {
+    DocumentReference checklist = FirebaseFirestore.instance.collection('Checklist').doc('r78yPLE8Z0GjOSsqjIt6');
+    return items = checklist.get() as Future<DocumentSnapshot<Map<String, dynamic>>>?;
   }
 }

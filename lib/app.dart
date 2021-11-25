@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'theme_model.dart';
+import 'checklist_model.dart';
 import 'page1.dart';
 
 class App extends StatelessWidget {
@@ -31,25 +31,16 @@ class NavigationPages extends StatefulWidget {
 }
 
 class _NavigationPages extends State<NavigationPages> {
-  late Future<DocumentSnapshot<Map<String, dynamic>>> myFuture;
-
   Offset position = const Offset(20.0, 20.0);
-
-  @override
-  void initState() {
-    super.initState();
-    DocumentReference checklist = FirebaseFirestore.instance.collection('Checklist').doc('r78yPLE8Z0GjOSsqjIt6');
-    myFuture = checklist.get() as Future<DocumentSnapshot<Map<String, dynamic>>>;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ThemeModel themeNotifier, child) {
       return ChangeNotifierProvider(
-          create: (_) => ThemeModel(),
-          child: Consumer(builder: (context, ThemeModel themeNotifier, child) {
+          create: (_) => ChecklistModel(),
+          child: Consumer(builder: (context, ChecklistModel checklistNotifier, child) {
             return Scaffold(
-              appBar: AppBar(centerTitle: true, title: Text('0'), actions: [
+              appBar: AppBar(centerTitle: true, title: Text(checklistNotifier.unckedCount.toString()), actions: [
                 SizedBox(
                     height: 75.0,
                     width: 75.0,
@@ -59,7 +50,7 @@ class _NavigationPages extends State<NavigationPages> {
                           themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
                         }))
               ]),
-              body: Stack(children: <Widget>[Page1(myFuture: myFuture)]),
+              body: Stack(children: const <Widget>[Page1()]),
             );
           }));
     });
