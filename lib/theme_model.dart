@@ -3,24 +3,18 @@ import 'theme_preference.dart';
 
 class ThemeModel extends ChangeNotifier {
   late bool _isDark;
-  late ThemePreferences _preferences;
+  late ThemePreference _preferences;
+
+  ThemeModel(bool initialIsDark) {
+    _isDark = initialIsDark;
+    _preferences = ThemePreference();
+  }
 
   bool get isDark => _isDark;
 
-  ThemeModel() {
-    _isDark = false;
-    _preferences = ThemePreferences();
-    getPreferences();
-  }
-
   set isDark(bool value) {
     _isDark = value;
-    _preferences.setTheme(value);
-    notifyListeners();
-  }
-
-  getPreferences() async {
-    _isDark = await _preferences.getTheme();
+    _preferences.setThemePreference(value);
     notifyListeners();
   }
 }
