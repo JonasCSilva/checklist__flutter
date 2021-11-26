@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'checklist_firebase.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChecklistModel extends ChangeNotifier {
   late ChecklistFirebase _checklistFirebase;
-  late Future<DocumentSnapshot<dynamic>> items;
-  late List<dynamic> items3;
+  List<dynamic> _items = [];
   int _checkedCount = 0;
   int _totalCount = 0;
 
   int get checkedCount => _checkedCount;
 
   int get totalCount => _totalCount;
+
+  List<dynamic> get items => _items;
 
   ChecklistModel() {
     _checklistFirebase = ChecklistFirebase();
@@ -22,18 +22,18 @@ class ChecklistModel extends ChangeNotifier {
     updateValues(items);
   }
 
-  Future<List<dynamic>> getItems() async {
-    items3 = await _checklistFirebase.getItems();
-    updateValues(items3);
-    items3.sort((a, b) {
-      return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
-    });
-    return items3;
+  Future<void> getItems() async {
+    var temp = await _checklistFirebase.getItems();
+    updateValues(temp);
   }
 
   void updateValues(items) {
     _checkedCount = count(items)['counterChecked'] as int;
     _totalCount = count(items)['counterTotal'] as int;
+    /* items.sort((a, b) {
+      return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+    }); */
+    _items = items;
     notifyListeners();
   }
 
