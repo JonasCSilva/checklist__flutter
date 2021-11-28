@@ -6,7 +6,9 @@ import '../theme/theme_model.dart';
 import '../checklist/checklist_model.dart';
 
 class AppBarLoaded extends StatelessWidget {
-  const AppBarLoaded({Key? key}) : super(key: key);
+  final IconButton iconButton;
+
+  const AppBarLoaded({Key? key, required this.iconButton}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +17,7 @@ class AppBarLoaded extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-              child: IconButton(
-                  icon: const Icon(Icons.add, size: 34),
-                  splashRadius: 30,
-                  onPressed: () {
-                    print('');
-                  }),
-              margin: const EdgeInsets.only(left: 20)),
+          Container(child: iconButton, margin: const EdgeInsets.only(left: 20)),
           Expanded(
             child: Center(
                 child: Text.rich(

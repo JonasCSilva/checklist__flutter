@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChecklistFirebase {
-  DocumentReference checklist = FirebaseFirestore.instance.collection('Checklist').doc('r78yPLE8Z0GjOSsqjIt6');
+  DocumentReference checklist = FirebaseFirestore.instance.collection('users').doc('PUWNgT8cw9VPlJBc8GjKhIJoID63');
 
   void setChecklist(List items) async {
     try {

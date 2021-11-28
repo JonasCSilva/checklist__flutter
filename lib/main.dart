@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firstapp/loaded/scaffold_loaded.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'loading/scaffold_loading.dart';
 import 'theme/theme_model.dart';
@@ -32,7 +31,7 @@ class App extends StatelessWidget {
               theme: themeNotifier.isDark ? ThemeData(brightness: Brightness.dark) : ThemeData(brightness: Brightness.light),
               debugShowCheckedModeBanner: false,
               home: FutureBuilder<void>(
-                  future: Future.delayed(const Duration(seconds: 10), () => checklistNotifier.getItems()),
+                  future: Future.delayed(const Duration(milliseconds: 10), () => checklistNotifier.getItems()),
                   builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                     if (checklistNotifier.items.isNotEmpty) {
                       return const ScaffoldLoaded();

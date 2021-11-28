@@ -30,10 +30,10 @@ class ChecklistModel extends ChangeNotifier {
   void updateValues(items) {
     _checkedCount = count(items)['counterChecked'] as int;
     _totalCount = count(items)['counterTotal'] as int;
-    /* items.sort((a, b) {
-      return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
-    }); */
     _items = items;
+    _items.sort((a, b) {
+      return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+    });
     notifyListeners();
   }
 
