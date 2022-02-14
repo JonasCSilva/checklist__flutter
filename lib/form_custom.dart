@@ -10,12 +10,10 @@ class FormCustom extends StatefulWidget {
   const FormCustom({Key? key, this.name, this.index}) : super(key: key);
 
   @override
-  FormCustomState createState() {
-    return FormCustomState();
-  }
+  State<FormCustom> createState() => _FormCustomState();
 }
 
-class FormCustomState extends State<FormCustom> {
+class _FormCustomState extends State<FormCustom> {
   final _formKey = GlobalKey<FormState>();
   late String formName;
 
